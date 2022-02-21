@@ -3,15 +3,10 @@ from . import models
 from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from .schemas import Release
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
-
-# Schema
-class Release(BaseModel):
-    name: str
-    dependency: int = "0"
-    is_archived: bool = False
 
 # **ROUTES BELOW**
 
