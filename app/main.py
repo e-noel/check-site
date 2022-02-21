@@ -11,3 +11,8 @@ app = FastAPI()
 @app.get("/api/health-check")
 def test_posts(db: Session = Depends(get_db)):
     return {"status": "healthy"}
+
+@app.get("/sqlalchemy")
+def test_alchemy(db: Session = Depends(get_db)):
+    releases = db.query(models.Release).all()
+    return {"data": releases}
