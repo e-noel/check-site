@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Column, Integer, String, text
+from sqlalchemy import TIMESTAMP, Column, Integer, String, text, Boolean
 from .database import Base
 
 class Release(Base):
@@ -8,3 +8,4 @@ class Release(Base):
     name = Column(String, nullable=False)
     release_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     dependency = Column(Integer, nullable=True, server_default='0')
+    is_archived = Column(Boolean, nullable=False, server_default='False')

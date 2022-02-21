@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://<username>:<password>@localhost/fastapi'
+#Edit this to connect to your local postgres DB
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@localhost/fastapi'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
