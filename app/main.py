@@ -33,3 +33,13 @@ def add_post(release: Release, db: Session = Depends(get_db)):
     db.refresh(new_release)
 
     return {"data": new_release}
+
+# Get Release by ID - IDs are unique
+@app.get("/release/{id}")
+def get_post_by_id(id: int, db: Session = Depends(get_db)):
+    release = db.query(models.Release).filter(models.Release.id == id).first()
+    
+    if not release:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="HTTP 404 Error: Post Not Found")
+    
+    return {"data": release}
