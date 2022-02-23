@@ -4,7 +4,7 @@ from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from .schemas import Release, ReleaseBase, Return
-
+from typing import List
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
@@ -16,7 +16,7 @@ def health_check(db: Session = Depends(get_db)):
     return {"status": "healthy"}
 
 # Get all releases
-@app.get("/release", status_code=status.HTTP_200_OK, response_model=Return)
+@app.get("/release", status_code=status.HTTP_200_OK, response_model=List[Return])
 def get_releases(db: Session = Depends(get_db)):
     releases = db.query(models.Release).all()
     return releases
