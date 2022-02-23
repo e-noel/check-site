@@ -1,6 +1,7 @@
 from sqlalchemy import TIMESTAMP, Column, Integer, String, text, Boolean
 from .database import Base
 
+# Releases table
 class Release(Base):
     __tablename__ = "releases"
 
@@ -9,3 +10,12 @@ class Release(Base):
     release_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     dependency = Column(Integer, nullable=True, server_default='0')
     is_archived = Column(Boolean, nullable=False, server_default='False')
+
+# Users table
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
