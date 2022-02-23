@@ -16,7 +16,7 @@ def health_check(db: Session = Depends(get_db)):
     return {"status": "healthy"}
 
 # Get all releases
-@app.get("/release")
+@app.get("/release", status_code=status.HTTP_200_OK, response_model=Return)
 def get_releases(db: Session = Depends(get_db)):
     releases = db.query(models.Release).all()
     return releases
@@ -32,7 +32,7 @@ def add_post(release: Release, db: Session = Depends(get_db)):
     return new_release
 
 # Get Release by ID - IDs are unique
-@app.get("/release/{id}")
+@app.get("/release/{id}", status_code=status.HTTP_200_OK, response_model=Return)
 def get_post_by_id(id: int, db: Session = Depends(get_db)):
     release = db.query(models.Release).filter(models.Release.id == id).first()
     
@@ -42,7 +42,7 @@ def get_post_by_id(id: int, db: Session = Depends(get_db)):
     return release
 
 # Delete Release by ID
-@app.delete("/release/{id}")
+@app.delete("/release/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def del_post_by_id(id: int, db: Session = Depends(get_db)):
     release = db.query(models.Release).filter(models.Release.id == id)
 
@@ -55,7 +55,7 @@ def del_post_by_id(id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Update Release (shouldn't be used often...)
-@app.put("/release/{id}")
+@app.put("/release/{id}", response_model=Return)
 def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)):
     release_query = db.query(models.Release).filter(models.Release.id == id)
     release = release_query.first()
