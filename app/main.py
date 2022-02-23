@@ -3,7 +3,7 @@ from . import models
 from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from .schemas import Release
+from .schemas import Release, ReleaseBase, Return
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -19,17 +19,17 @@ def health_check(db: Session = Depends(get_db)):
 @app.get("/release")
 def get_releases(db: Session = Depends(get_db)):
     releases = db.query(models.Release).all()
-    return {"data": releases}
+    return releases
 
 # Add a release
-@app.post("/release")
+@app.post("/release", status_code=status.HTTP_201_CREATED, response_model=Return)
 def add_post(release: Release, db: Session = Depends(get_db)):
     new_release = models.Release(**release.dict())
     db.add(new_release)
     db.commit()
     db.refresh(new_release)
 
-    return {"data": new_release}
+    return new_release
 
 # Get Release by ID - IDs are unique
 @app.get("/release/{id}")
@@ -39,7 +39,7 @@ def get_post_by_id(id: int, db: Session = Depends(get_db)):
     if not release:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="HTTP 404 Error: Post Not Found")
     
-    return {"data": release}
+    return release
 
 # Delete Release by ID
 @app.delete("/release/{id}")
@@ -65,4 +65,4 @@ def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)
     
     release_query.update(updated_release.dict(), synchronize_session=False)
     db.commit()
-    return {"data": release_query.first()}
+    return release_query.first()
