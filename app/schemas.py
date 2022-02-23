@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from datetime import datetime
 # Pydantic Model (Schema)
 """ class Release(BaseModel):
     name: str
@@ -21,10 +21,8 @@ class Release(ReleaseBase):
     pass
 
 # Model for responses
-class Return(BaseModel):
-    name: str
-    dependency: int
-    is_archived: bool
+class Return(ReleaseBase):
+    release_date: datetime
 
     class Config:
         orm_mode = True
