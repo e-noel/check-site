@@ -2,9 +2,10 @@ from fastapi import FastAPI, Response, status, HTTPException, Depends
 from . import models
 from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from .schemas import Release, ReleaseBase, Return, UserCreate, UserReturn
 from typing import List
+from . import utils
+
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
@@ -71,6 +72,11 @@ def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)
 # Create a user
 @app.post("/user", status_code=status.HTTP_201_CREATED, response_model=UserReturn)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    # Hash the password
+    hashed_pw = utils.hash(user.password)
+    user.password = hashed_pw
+
+    # Store user
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()
