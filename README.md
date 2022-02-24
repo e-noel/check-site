@@ -3,7 +3,7 @@ Site Version Checking and Tracking app built on FastAPI
 
 This tool will be used in my day job to monitor and track changes we make to our SaaS environment to speed up my deployment/upgrade efforts and minimize delays due to dependency issues.
 
-# Stack
+# Libraries
 - FastAPI
 - SQLAlchemy w/ Postgres
 - uvicorn in development
