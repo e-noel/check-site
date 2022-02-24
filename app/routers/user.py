@@ -1,4 +1,3 @@
-from email.policy import HTTP
 from fastapi import status, HTTPException, Depends, APIRouter
 from .. import models
 from ..database import get_db
