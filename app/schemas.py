@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 # Pydantic Model (Schema)
 """ class Release(BaseModel):
@@ -26,3 +26,8 @@ class Return(ReleaseBase):
 
     class Config:
         orm_mode = True
+
+#model for users
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
