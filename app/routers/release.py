@@ -63,4 +63,5 @@ def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)
     
     release_query.update(updated_release.dict(), synchronize_session=False)
     db.commit()
+    
     return release_query.first()
