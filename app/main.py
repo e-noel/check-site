@@ -3,7 +3,7 @@ from . import models
 from .database import engine, SessionLocal, get_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from .schemas import Release, ReleaseBase, Return, UserCreate
+from .schemas import Release, ReleaseBase, Return, UserCreate, UserReturn
 from typing import List
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -69,7 +69,7 @@ def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)
 
 
 # Create a user
-@app.post("/user", status_code=status.HTTP_201_CREATED)
+@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=UserReturn)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = models.User(**user.dict())
     db.add(new_user)

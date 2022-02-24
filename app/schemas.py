@@ -27,7 +27,16 @@ class Return(ReleaseBase):
     class Config:
         orm_mode = True
 
-#model for users
+# Model for users
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
+# User Response model
+class UserReturn(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    class Config:
+        orm_mode=True
