@@ -40,3 +40,8 @@ class UserReturn(BaseModel):
 
     class Config:
         orm_mode=True
+
+# User login schema
+class Login(BaseModel):
+    email: EmailStr
+    password: str

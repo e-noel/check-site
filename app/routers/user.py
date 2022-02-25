@@ -6,7 +6,8 @@ from ..schemas import UserCreate, UserReturn
 from .. import utils
 
 router = APIRouter(
-    prefix="/user"
+    prefix="/user",
+    tags=['Users']
 )
 
 # Create a user

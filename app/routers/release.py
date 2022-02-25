@@ -6,7 +6,8 @@ from ..schemas import Release, Return
 from typing import List
 
 router = APIRouter(
-    prefix="/release"
+    prefix="/release",
+    tags=['Releases']
 )
 
 @router.get("/api/health-check")
