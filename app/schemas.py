@@ -18,13 +18,14 @@ class ReleaseBase(BaseModel):
     class Config:
         orm_mode = True
 
-class Release(ReleaseBase):
+class ReleaseCreate(ReleaseBase):
     pass
 
 # Model for responses
 class Return(ReleaseBase):
     release_date: datetime
     id: int
+    owner_id: int
 
     class Config:
         orm_mode = True
