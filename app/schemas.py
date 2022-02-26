@@ -21,15 +21,6 @@ class ReleaseBase(BaseModel):
 class ReleaseCreate(ReleaseBase):
     pass
 
-# Model for responses
-class Return(ReleaseBase):
-    release_date: datetime
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
 # Model for users
 class UserCreate(BaseModel):
     email: EmailStr
@@ -43,6 +34,15 @@ class UserReturn(BaseModel):
 
     class Config:
         orm_mode=True
+
+# Model for responses
+class Return(ReleaseBase):
+    release_date: datetime
+    id: int
+    owner_id: int
+    owner: UserReturn
+    class Config:
+        orm_mode = True
 
 # User login schema
 class Login(BaseModel):

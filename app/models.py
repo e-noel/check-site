@@ -1,6 +1,7 @@
 from tkinter import CASCADE
 from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, text, Boolean
 from .database import Base
+from sqlalchemy.orm import relationship
 
 # Releases table
 class Release(Base):
@@ -13,6 +14,7 @@ class Release(Base):
     is_archived = Column(Boolean, nullable=False, server_default='False')
     owner_id = Column(Integer, ForeignKey("users.id", ondelete=CASCADE), nullable=False)
 
+    owner = relationship("User")
 # Users table
 class User(Base):
     __tablename__ = "users"
