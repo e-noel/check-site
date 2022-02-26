@@ -18,8 +18,9 @@ def health_check(db: Session = Depends(get_db)):
 
 # Get all releases
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[Return])
-def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
-    releases = db.query(models.Release).all()
+def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0):
+    print(limit)
+    releases = db.query(models.Release).order_by(models.Release.release_date).limit(limit).offset(skip).all()
     return releases
 
 
@@ -75,7 +76,7 @@ def update_post(id: int, updated_release: ReleaseCreate, db: Session = Depends(g
 
     if release == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="HTTP 404 Error: Post Not Found")
-        
+
     # still trying to figure out why current_user.id returns type str
     if release.owner_id != int(current_user.id):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action.")
