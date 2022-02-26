@@ -1,4 +1,5 @@
-from sqlalchemy import TIMESTAMP, Column, Integer, String, text, Boolean
+from tkinter import CASCADE
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, text, Boolean
 from .database import Base
 
 # Releases table
@@ -10,6 +11,7 @@ class Release(Base):
     release_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     dependency = Column(Integer, nullable=True, server_default='0')
     is_archived = Column(Boolean, nullable=False, server_default='False')
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete=CASCADE))
 
 # Users table
 class User(Base):

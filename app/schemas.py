@@ -24,6 +24,7 @@ class Release(ReleaseBase):
 # Model for responses
 class Return(ReleaseBase):
     release_date: datetime
+    id: int
 
     class Config:
         orm_mode = True
