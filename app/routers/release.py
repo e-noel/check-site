@@ -2,7 +2,7 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter
 from .. import models
 from ..database import get_db
 from sqlalchemy.orm import Session
-from ..schemas import Release, Return
+from ..schemas import Release, Return, Token
 from typing import List
 from .. import oauth2, models
 
@@ -18,7 +18,7 @@ def health_check(db: Session = Depends(get_db)):
 
 # Get all releases
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[Return])
-def get_releases(db: Session = Depends(get_db)):
+def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     releases = db.query(models.Release).all()
     return releases
 
@@ -35,7 +35,7 @@ def add_post(release: Release, db: Session = Depends(get_db), user_id = Depends(
 
 # Get Release by ID - IDs are unique
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=Return)
-def get_post_by_id(id: int, db: Session = Depends(get_db)):
+def get_post_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     release = db.query(models.Release).filter(models.Release.id == id).first()
     
     if not release:
@@ -45,7 +45,7 @@ def get_post_by_id(id: int, db: Session = Depends(get_db)):
 
 # Delete Release by ID
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def del_post_by_id(id: int, db: Session = Depends(get_db)):
+def del_post_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     release = db.query(models.Release).filter(models.Release.id == id)
 
     if release.first() == None:
@@ -58,7 +58,7 @@ def del_post_by_id(id: int, db: Session = Depends(get_db)):
 
 # Update Release (shouldn't be used often...)
 @router.put("/{id}", response_model=Return)
-def update_post(id: int, updated_release: Release, db: Session = Depends(get_db)):
+def update_post(id: int, updated_release: Release, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     release_query = db.query(models.Release).filter(models.Release.id == id)
     release = release_query.first()
 
