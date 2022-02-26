@@ -1,12 +1,19 @@
+from email.policy import HTTP
+from fastapi import Depends, status, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-# Define secret key, algorithm and expiration time for token
+from . import schemas
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+
+# Define secret key, algorithm and expiration time for token
 SECRET_KEY = "398HNha0348LAweoiAWERou3678cbvaskYywe8091Ah3L4J209fbaJAVBXHNS"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def create_token(data: dict):
+
     to_encode = data.copy()
 
     expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -14,3 +21,26 @@ def create_token(data: dict):
 
     encoded = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
     return encoded
+
+def verify_token(token: str, credentials_exception):
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+
+        id: str = payload.get("user_id")
+
+        if not id:
+            raise credentials_exception
+        #Validate
+        token_data = schemas.TokenData(id=id)
+
+    except JWTError:
+        raise credentials_exception
+
+    return token_data
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+
+    credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
+
+    return verify_token(token, credentials_exception)
