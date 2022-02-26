@@ -45,25 +45,40 @@ def add_post(release: ReleaseCreate, db: Session = Depends(get_db), current_user
 
 # Delete Release by ID
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def del_post_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
-    release = db.query(models.Release).filter(models.Release.id == id)
+def del_post_by_id(id: int, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
+    release_query = db.query(models.Release).filter(models.Release.id == id)
+    release = release_query.first()
 
-    if release.first() == None:
+    #userid = current_user.id
+    #releaseid = release.owner_id
+    #print(userid, releaseid)
+    #print(type(userid), type(releaseid))
+    #print(userid == releaseid)
+
+    if release == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="HTTP 404 Error: Post Not Found")
 
-    release.delete(synchronize_session=False)
+    # still trying to figure out why current_user.id returns type str
+    if release.owner_id != int(current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action.")
+
+    release_query.delete(synchronize_session=False)
     db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # Update Release (shouldn't be used often...)
 @router.put("/{id}", response_model=Return)
-def update_post(id: int, updated_release: ReleaseCreate, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
+def update_post(id: int, updated_release: ReleaseCreate, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
     release_query = db.query(models.Release).filter(models.Release.id == id)
     release = release_query.first()
 
     if release == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="HTTP 404 Error: Post Not Found")
+        
+    # still trying to figure out why current_user.id returns type str
+    if release.owner_id != int(current_user.id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action.")
     
     release_query.update(updated_release.dict(), synchronize_session=False)
     db.commit()
