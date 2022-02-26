@@ -1,9 +1,12 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
+
+from app.oauth2 import get_current_user
 from .. import models
 from ..database import get_db
 from sqlalchemy.orm import Session
 from ..schemas import Release, Return
 from typing import List
+
 
 router = APIRouter(
     prefix="/release",
@@ -21,7 +24,7 @@ def get_releases(db: Session = Depends(get_db)):
     return releases
 
 # Add a release
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=Return)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def add_post(release: Release, db: Session = Depends(get_db)):
     new_release = models.Release(**release.dict())
     db.add(new_release)
