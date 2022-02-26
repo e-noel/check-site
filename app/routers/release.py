@@ -1,11 +1,10 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
-
-from app.oauth2 import get_current_user
 from .. import models
 from ..database import get_db
 from sqlalchemy.orm import Session
 from ..schemas import Release, Return
 from typing import List
+from .. import oauth2, models
 
 
 router = APIRouter(
@@ -23,9 +22,10 @@ def get_releases(db: Session = Depends(get_db)):
     releases = db.query(models.Release).all()
     return releases
 
-# Add a release
+# Create a release
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def add_post(release: Release, db: Session = Depends(get_db)):
+def add_post(release: Release, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
+    print(user_id)
     new_release = models.Release(**release.dict())
     db.add(new_release)
     db.commit()
