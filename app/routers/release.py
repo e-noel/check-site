@@ -3,7 +3,7 @@ from .. import models
 from ..database import get_db
 from sqlalchemy.orm import Session
 from ..schemas import ReleaseCreate, Return, Token
-from typing import List
+from typing import List, Optional
 from .. import oauth2, models
 
 
@@ -18,9 +18,9 @@ def health_check(db: Session = Depends(get_db)):
 
 # Get all releases
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[Return])
-def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0):
+def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     print(limit)
-    releases = db.query(models.Release).order_by(models.Release.release_date).limit(limit).offset(skip).all()
+    releases = db.query(models.Release).filter(models.Release.name.contains(search)).order_by(models.Release.release_date).limit(limit).offset(skip).all()
     return releases
 
 
