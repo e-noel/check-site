@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     access_token_expiration_minutes: int
 
     class Config:
-        env_file = 'app/.env'
+        env_file = 'app.env'
         env_file_encoding = 'utf-8'
 
 settings = Settings()
