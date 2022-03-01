@@ -1,5 +1,5 @@
 # "SaaSMon"
-## Site Version Checking and Tracking app built on FastAPI - Public API example is live on <https://api.saasmon.xyz> . View documentation: <https://api.saasmon.xyz/docs> or <https://api.saasmon.xyz/redoc>
+## Site Version Checking and Tracking app built on [FastAPI](https://fastapi.tiangolo.com/) - Public API example is live on <https://api.saasmon.xyz> . View documentation: <https://api.saasmon.xyz/docs> or <https://api.saasmon.xyz/redoc>
 
 This tool will be used in my day job to monitor and track changes we make to our SaaS environment to speed up my deployment/upgrade efforts and minimize delays due to dependency issues.  The public deployment is just there for review - this app would typically be deployed as an internal tool.
 
