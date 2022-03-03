@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, text, Boolean
 from .database import Base
 from sqlalchemy.orm import relationship
