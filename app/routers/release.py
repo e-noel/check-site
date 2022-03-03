@@ -25,7 +25,7 @@ def get_releases(db: Session = Depends(get_db), user_id = Depends(oauth2.get_cur
 
 # Get Release by ID - IDs are unique
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=Return)
-def get_post_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
+def get_release_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     release = db.query(models.Release).filter(models.Release.id == id).first()
     
     if not release:
@@ -35,7 +35,7 @@ def get_post_by_id(id: int, db: Session = Depends(get_db), user_id = Depends(oau
 
 # Create a release
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def add_post(release: ReleaseCreate, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
+def add_release(release: ReleaseCreate, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
     new_release = models.Release(owner_id=current_user.id, **release.dict())
     db.add(new_release)
     db.commit()
@@ -45,7 +45,7 @@ def add_post(release: ReleaseCreate, db: Session = Depends(get_db), current_user
 
 # Delete Release by ID
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def del_post_by_id(id: int, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
+def del_release_by_id(id: int, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
     release_query = db.query(models.Release).filter(models.Release.id == id)
     release = release_query.first()
 
@@ -69,7 +69,7 @@ def del_post_by_id(id: int, db: Session = Depends(get_db), current_user = Depend
 
 # Update Release (shouldn't be used often...)
 @router.put("/{id}", response_model=Return)
-def update_post(id: int, updated_release: ReleaseCreate, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
+def update_release(id: int, updated_release: ReleaseCreate, db: Session = Depends(get_db), current_user = Depends(oauth2.get_current_user)):
     release_query = db.query(models.Release).filter(models.Release.id == id)
     release = release_query.first()
 
