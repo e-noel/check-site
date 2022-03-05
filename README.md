@@ -18,7 +18,7 @@ My hope is to have a fully functional API and back-end ready before the end of M
 By the end of the project, this will be a fully-featured API with authentication (JWT), reverse proxy, containerized with Docker, use of Github Actions for CI/CD, CircleCI, Github Secrets, and ultimately deployed on AWS.
 
 ## Features to date:
-✔ Hosted on DigitalOcean Ubuntu 20.04 LTS droplet
-✔ Session authentication with JWT
-✔ Reverse proxy with Nginx
-✔ Served on gunicorn WSGI server
+-- ✔ Hosted on DigitalOcean Ubuntu 20.04 LTS droplet
+-- ✔ Session authentication with JWT
+-- ✔ Reverse proxy with Nginx
+-- ✔ Served on gunicorn WSGI server
